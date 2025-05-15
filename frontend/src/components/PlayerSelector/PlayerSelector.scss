@@ -1,0 +1,61 @@
+.player-selector {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  button {
+    font-size: 20px;
+    padding: 5px 15px;
+    cursor: pointer;
+    &:disabled {
+      opacity: 0.8;
+    }
+  }
+
+  .players-container {
+    display: flex;
+    overflow: hidden;
+    transition: transform 0.3s ease-in-out;
+  }
+
+  .player-card-0 {
+    min-width: 50px;
+    padding: 10px;
+    margin: 5px;
+    background-color: #3498db;
+    color: white;
+    border-radius: 5px;
+    text-align: center;
+    transition: transform 0.3s ease-in-out;
+  }
+  .player-card-1 {
+    min-width: 50px;
+    padding: 10px;
+    margin: 5px;
+    background-color: #db5b34;
+    color: white;
+    border-radius: 5px;
+    text-align: center;
+    transition: transform 0.3s ease-in-out;
+  }
+  .player-card-2 {
+    min-width: 50px;
+    padding: 10px;
+    margin: 5px;
+    background-color: #2ccc6f;
+    color: white;
+    border-radius: 5px;
+    text-align: center;
+    transition: transform 0.3s ease-in-out;
+  }
+  .player-card-3 {
+    min-width: 50px;
+    padding: 10px;
+    margin: 5px;
+    background-color: #db34c5;
+    color: white;
+    border-radius: 5px;
+    text-align: center;
+    transition: transform 0.3s ease-in-out;
+  }
+}
