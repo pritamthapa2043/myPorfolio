@@ -3,6 +3,8 @@ import "./TicTacBoard.scss";
 import { drawBoard } from "./TicTacToeBoard.helper";
 
 type Player = "X" | "O" | null;
+type PlayerInfo = {  id: number; symbol: string, name: string };
+
 
 type TicTacToeBoardProps = {
   roomId: string;
@@ -21,6 +23,7 @@ const TicTacToeOnlineBoard: React.FC<TicTacToeBoardProps> = ({
 }) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const wsRef = useRef<WebSocket | null>(null);
+  const [playerInfo, setPlayerInfo] = useState("")
 
   const [board, setBoard] = useState<Player[][]>(
     Array(BOARD_SIZE)
@@ -44,7 +47,7 @@ const TicTacToeOnlineBoard: React.FC<TicTacToeBoardProps> = ({
 
     ws.onopen = () => {
       setStatusMessage("Connected. Joining room...");
-      ws.send(JSON.stringify({ action: "join", roomId, playerId }));
+      ws.send(JSON.stringify({ action: "join", roomId, playerId, username }));
     };
 
     ws.onmessage = (event) => {
@@ -53,6 +56,7 @@ const TicTacToeOnlineBoard: React.FC<TicTacToeBoardProps> = ({
       switch (data.action) {
         case "joined":
           setRole(data.role);
+          console.log('data', data)
           setStatusMessage(`Waiting for opponent... You are ${data.role}`);
           break;
 
@@ -73,6 +77,14 @@ const TicTacToeOnlineBoard: React.FC<TicTacToeBoardProps> = ({
           setBoard(data.board);
           setCurrentTurn(data.currentTurn);
           setStatusMessage(`${data.currentTurn}'s turn.`);
+          break;
+
+        case "players_info":
+        data.players.map((info:PlayerInfo )=>{
+          if (info.symbol!==role) {
+            setPlayerInfo(info.name)
+          }
+        })
           break;
 
         case "game_over":
@@ -108,7 +120,7 @@ const TicTacToeOnlineBoard: React.FC<TicTacToeBoardProps> = ({
     return () => {
       ws.close();
     };
-  }, [roomId, playerId]);
+  }, [roomId, playerId,role,username]);
 
   const handleClick = (e: React.MouseEvent<HTMLCanvasElement>) => {
     if (winner || isDraw) return;
@@ -140,7 +152,7 @@ const TicTacToeOnlineBoard: React.FC<TicTacToeBoardProps> = ({
   return (
     <div className="ticTictoe-board-container">
       <div className="player X">
-        <h1>X</h1>
+        <h1>{role}</h1>
         <span>{username}</span>
       </div>
 
@@ -168,8 +180,8 @@ const TicTacToeOnlineBoard: React.FC<TicTacToeBoardProps> = ({
       </div>
 
       <div className="player O">
-        <h1>O</h1>
-        <span>{"Player 2"}</span>
+        <h1>{role==="O"? "X": "O"}</h1>
+        <span>{playerInfo}</span>
       </div>
     </div>
   );

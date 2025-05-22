@@ -26,7 +26,7 @@ const PORT = 2020;
 const wss = new WebSocketServer({ port: PORT });
 
 type PlayerSymbol = "X" | "O";
-type Player = { ws: WebSocket; id: number; symbol: PlayerSymbol };
+type Player = { ws: WebSocket; id: number; symbol: PlayerSymbol, username: string };
 type Room = {
   roomId: string;
   players: Player[];
@@ -157,8 +157,8 @@ wss.on("connection", (ws) => {
     console.log("action", action);
 
     if (action === "join") {
-      const { roomId, playerId } = data;
-      if (!roomId || !playerId) {
+      const { roomId, playerId, username } = data;
+      if (!roomId || !playerId || !username) {
         return ws.send(
           JSON.stringify({
             action: "error",
@@ -185,14 +185,22 @@ wss.on("connection", (ws) => {
 
       const symbol: PlayerSymbol = room.players.length === 0 ? "X" : "O";
       currentRoom = room;
-      currentPlayer = { ws, id: playerId, symbol };
+      currentPlayer = { ws, id: playerId, symbol, username };
       room.players.push(currentPlayer);
 
       ws.send(JSON.stringify({ action: "joined", role: symbol }));
-      console.log(`Player ID ${playerId} joined room ${roomId} as ${symbol}`);
+      console.log(`Player ID ${playerId} name ${username}  joined room ${roomId} as ${symbol}`);
 
       if (room.players.length === 2) {
         const [pX, pO] = room.players;
+        broadcastToRoom(room, {
+          action: "players_info",
+          players: room.players.map((info)=>({
+            id: info.id,
+            name: info.username,
+            symbol: info.symbol
+          }))
+        })
         room.board = createEmptyBoard();
         room.currentTurn = "X";
 
