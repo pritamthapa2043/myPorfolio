@@ -26,9 +26,12 @@ const Login = () => {
 
   const handleSubmit = async () => {
     const data: LoginResponse = await handleLogin(email, password);
+    console.log("data", data);
 
     if (data?.status === 200) {
       localStorage.setItem("token", data.data.accessToken);
+      localStorage.setItem("userId", data.data.user.id.toString());
+      localStorage.setItem("username", data.data.user.username);
       navigate("/home", { replace: true });
     } else {
       setLoginError(data?.response?.data?.message);
