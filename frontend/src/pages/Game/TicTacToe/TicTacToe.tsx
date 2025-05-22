@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import  { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import TicTacToeBoard from "../../../components/TictacToeBoard/TicTacToeBoard";
 import TicTacToeOnlineBoard from "../../../components/TictacToeBoard/TicTacToeOnlineBoard";
@@ -9,14 +9,14 @@ const TicTacToe = () => {
 
   const navigate = useNavigate();
   const [isGameMenu, setIsGameMenu] = useState(false);
-  const [gameMode, setGameMode] = useState("OFFLINE");
+  const [gameMode, setGameMode] = useState("LOCAL");
   const [Player1, setPlayer1] = useState("");
   const [Player2, setPlayer2] = useState("");
   const [roomId, setRoomId] = useState("");
   const [isJoining, setIsJoining] = useState(false);
 
   const handleDecrease = () => {
-    setGameMode("OFFLINE");
+    setGameMode("LOCAL");
   };
   const handleIncrease = () => {
     setGameMode("ONLINE");
@@ -41,7 +41,7 @@ const TicTacToe = () => {
             <button onClick={handleDecrease}>{`<`}</button>
             <div>{gameMode}</div>
             <button onClick={handleIncrease}>{`>`}</button>
-            {gameMode === "OFFLINE" && (
+            {gameMode === "LOCAL" && (
               <>
                 <span>Player 1 Name:</span>
                 <input
@@ -110,7 +110,7 @@ const TicTacToe = () => {
           <button onClick={() => navigate("/game")}>Exit</button>
         </div>
       )}
-      {isGameMenu && gameMode === "OFFLINE" && (
+      {isGameMenu && gameMode === "LOCAL" && (
         <TicTacToeBoard player1={Player1} player2={Player2} />
       )}
       {isGameMenu && gameMode === "ONLINE" && (
