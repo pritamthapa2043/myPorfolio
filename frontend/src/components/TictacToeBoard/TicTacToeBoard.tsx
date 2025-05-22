@@ -4,7 +4,6 @@ import { drawBoard } from "./TicTacToeBoard.helper";
 
 type Player = "X" | "O" | null;
 type TicTacToeBoardProps = {
-  gameMode: string;
   player1: string;
   player2: string;
 };
@@ -13,7 +12,6 @@ const CELL_SIZE = 100;
 const BOARD_SIZE = 3;
 
 const TicTacToeBoard: React.FC<TicTacToeBoardProps> = ({
-  gameMode,
   player2,
   player1,
 }) => {
@@ -26,7 +24,7 @@ const TicTacToeBoard: React.FC<TicTacToeBoardProps> = ({
   const [currentPlayer, setCurrentPlayer] = useState<Player>("X");
   const [winner, setWinner] = useState<Player>(null);
   const [isDraw, setIsDraw] = useState(false);
-  console.log("gameMode", gameMode);
+
   useEffect(() => {
     drawBoard(canvasRef, BOARD_SIZE, CELL_SIZE, board);
   }, [board]);
@@ -107,7 +105,7 @@ const TicTacToeBoard: React.FC<TicTacToeBoardProps> = ({
     <div className="ticTictoe-board-container">
       <div className="player X">
         <h1>X</h1>
-        <span>{player1}</span>
+        <span>{player1 || "Player 1"}</span>
       </div>
 
       <div className="canvas-container">
@@ -131,7 +129,7 @@ const TicTacToeBoard: React.FC<TicTacToeBoardProps> = ({
           )}
           {(winner || isDraw) && (
             <button onClick={resetGame} className="restart-button">
-              {gameMode === "OFFLINE" ? "Restart" : "Rematch"}
+              Restart
             </button>
           )}
         </div>
@@ -139,7 +137,7 @@ const TicTacToeBoard: React.FC<TicTacToeBoardProps> = ({
 
       <div className="player O">
         <h1>O</h1>
-        <span>{player2}</span>
+        <span>{player2 || "Player 2"}</span>
       </div>
     </div>
   );
