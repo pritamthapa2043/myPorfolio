@@ -1,22 +1,21 @@
-import { useNavigate } from "react-router-dom";
+import About from "../../sections/About";
+import Contact from "../../sections/Contact";
+import Experiences from "../../sections/Experiences";
+import Footer from "../../sections/Footer";
+import Intro from "../../sections/Intro";
+import Logo from "../../sections/Logo";
+import Projects from "../../sections/Projects";
 
 const Home = () => {
-  const navigate = useNavigate();
-
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    window.dispatchEvent(new Event("storage"));
-    navigate("/login");
-  };
-
-  const navigateToGame = () => {
-    navigate("/game");
-  };
   return (
-    <div style={{ width: "100%", height: "100%" }}>
-      <h1>Home</h1>
-      <button onClick={handleLogout}>Logout</button>
-      <button onClick={navigateToGame}>Games</button>
+    <div className="container mx-auto max-w-7xl">
+      <Logo />
+      <Intro />
+      <About />
+      <Projects />
+      <Experiences />
+      <Contact />
+      <Footer />
     </div>
   );
 };
