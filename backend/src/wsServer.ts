@@ -26,13 +26,21 @@ const PORT = 2020;
 const wss = new WebSocketServer({ port: PORT });
 
 type PlayerSymbol = "X" | "O";
-type Player = { ws: WebSocket; id: number; symbol: PlayerSymbol, username: string };
+type Player = {
+  ws: WebSocket;
+  id: number;
+  symbol: PlayerSymbol;
+  username: string;
+};
 type Room = {
   roomId: string;
   players: Player[];
   board: (PlayerSymbol | null)[][];
   currentTurn: PlayerSymbol;
   gameId: number | null;
+  rematchRequestedBy?: number;
+  gameCreationInProgress?: boolean;
+  isRematchAccepted?: boolean;
 };
 
 const rooms = new Map<string, Room>();
@@ -95,18 +103,49 @@ function checkWinner(
   return board.flat().every((cell) => cell !== null) ? "draw" : null;
 }
 
-const createGame = async (
+const createWaitingGame = async (
   roomId: string,
-  playerXId: number,
-  playerOId: number
+  playerXId: number
 ): Promise<number> => {
   const res = await pool.query(
     `INSERT INTO tic_tac_toe.games (room_id, status, player_x_id, player_o_id)
-     VALUES ($1, 'in_progress', $2, $3) RETURNING id`,
-    [roomId, playerXId, playerOId]
+     VALUES ($1, 'waiting', $2, NULL) RETURNING id`,
+    [roomId, playerXId]
   );
-
   return res.rows[0].id;
+};
+
+const updateGameStart = async (
+  gameId: number,
+  playerOId: number,
+  roomId: string
+) => {
+  await pool.query(
+    `UPDATE tic_tac_toe.games
+     SET status = 'in_progress', player_o_id = $2
+     WHERE id = $1`,
+    [gameId, playerOId]
+  );
+  await pool.query(
+    `delete from tic_tac_toe.games where room_id = $1 AND status ='waiting'`,
+    [roomId]
+  );
+};
+
+const updateGamestats = async (roomId: string) => {
+  await pool.query(
+    `DELETE FROM tic_tac_toe.games 
+     WHERE room_id = $1 
+     AND status = 'in_progress' 
+     AND player_x_id = player_o_id`,
+    [roomId]
+  );
+  const res = await pool.query(
+    `select * from tic_tac_toe.games where room_id = $1 and status ='in_progress'`,
+    [roomId]
+  );
+  console.log("res", res.rows);
+  return res.rows[0]?.id;
 };
 
 async function insertMove(
@@ -123,10 +162,27 @@ async function insertMove(
   );
 }
 
-async function updateGameWinner(gameId: number, winnerId: number | null) {
+async function updateGameWinner(
+  gameId: number,
+  winnerId: number | null,
+  roomId: string
+) {
+  await pool.query(
+    `DELETE FROM tic_tac_toe.games 
+     WHERE room_id = $1 
+     AND status = 'in_progress' 
+     AND player_x_id = player_o_id`,
+    [roomId]
+  );
+
+  const res = await pool.query(
+    `select * from tic_tac_toe.games where room_id = $1 and status ='in_progress'`,
+    [roomId]
+  );
+  console.log("res.rows[0].id", res.rows[0].id);
   await pool.query(
     `UPDATE tic_tac_toe.games SET status='completed', winner_id=$2 WHERE id=$1`,
-    [gameId, winnerId]
+    [res.rows[0].id ? res.rows[0].id : roomId, winnerId]
   );
 }
 
@@ -154,10 +210,10 @@ wss.on("connection", (ws) => {
     }
 
     const { action } = data;
-    console.log("action", action);
 
     if (action === "join") {
       const { roomId, playerId, username } = data;
+
       if (!roomId || !playerId || !username) {
         return ws.send(
           JSON.stringify({
@@ -168,6 +224,7 @@ wss.on("connection", (ws) => {
       }
 
       let room = rooms.get(roomId);
+
       if (!room) {
         room = {
           roomId,
@@ -189,38 +246,73 @@ wss.on("connection", (ws) => {
       room.players.push(currentPlayer);
 
       ws.send(JSON.stringify({ action: "joined", role: symbol }));
-      console.log(`Player ID ${playerId} name ${username}  joined room ${roomId} as ${symbol}`);
 
-      if (room.players.length === 2) {
-        const [pX, pO] = room.players;
-        broadcastToRoom(room, {
-          action: "players_info",
-          players: room.players.map((info)=>({
-            id: info.id,
-            name: info.username,
-            symbol: info.symbol
-          }))
-        })
-        room.board = createEmptyBoard();
-        room.currentTurn = "X";
+      if (
+        room.players.length === 1 &&
+        !room.gameId &&
+        !room.gameCreationInProgress
+      ) {
+        if (room?.isRematchAccepted) return;
 
+        // First player joined -> create waiting game
+        room.gameCreationInProgress = true;
         try {
-          room.gameId = await createGame(roomId, pX.id, pO.id);
+          room.gameId = await createWaitingGame(room.roomId, currentPlayer.id);
         } catch (e) {
-          return ws.send(
+          room.gameCreationInProgress = false;
+          ws.send(
             JSON.stringify({
               action: "error",
-              error: "DB game creation failed",
+              error: "Failed to create waiting game",
             })
           );
+          console.error("Error creating waiting game:", e);
+          return;
         }
+        room.gameCreationInProgress = false;
+      }
 
-        broadcastToRoom(room, {
-          action: "start",
-          currentTurn: room.currentTurn,
-          board: room.board,
-        });
-        console.log(`Game started in room ${roomId}`);
+      if (
+        room.players.length === 2 &&
+        room.gameId &&
+        !room.gameCreationInProgress
+      ) {
+        if (room?.isRematchAccepted) return;
+
+        // Second player joined -> update game to in_progress
+        room.gameCreationInProgress = true;
+        try {
+          const secondPlayer = room.players.find(
+            (p) => p.id !== currentPlayer?.id
+          );
+          if (!secondPlayer) throw new Error("Second player not found");
+          await updateGameStart(room.gameId, currentPlayer.id, roomId);
+
+          room.board = createEmptyBoard();
+          room.currentTurn = "X";
+
+          // Notify players about game start
+          broadcastToRoom(room, {
+            action: "players_info",
+            players: room.players.map((info) => ({
+              id: info.id,
+              name: info.username,
+              symbol: info.symbol,
+            })),
+          });
+
+          broadcastToRoom(room, {
+            action: "start",
+            currentTurn: room.currentTurn,
+            board: room.board,
+          });
+        } catch (e) {
+          ws.send(
+            JSON.stringify({ action: "error", error: "Failed to start game" })
+          );
+          console.error("Error starting game:", e);
+        }
+        room.gameCreationInProgress = false;
       }
     } else if (action === "move") {
       const { row, col } = data;
@@ -270,7 +362,8 @@ wss.on("connection", (ws) => {
         try {
           await updateGameWinner(
             currentRoom.gameId!,
-            winner === "draw" ? null : currentPlayer.id
+            winner === "draw" ? null : currentPlayer.id,
+            currentRoom.roomId
           );
         } catch {
           return ws.send(
@@ -286,7 +379,7 @@ wss.on("connection", (ws) => {
           board: currentRoom.board,
           winner,
         });
-        rooms.delete(currentRoom.roomId);
+
         return;
       }
 
@@ -296,6 +389,119 @@ wss.on("connection", (ws) => {
         board: currentRoom.board,
         currentTurn: currentRoom.currentTurn,
       });
+    } else if (action === "rematch_request") {
+      if (!currentRoom && !currentPlayer) return;
+      if (currentRoom && currentPlayer) {
+        currentRoom.rematchRequestedBy = currentPlayer.id;
+
+        const otherPlayer = currentRoom.players.find(
+          (p) => p.id !== currentPlayer?.id
+        );
+        if (otherPlayer) {
+          otherPlayer.ws.send(
+            JSON.stringify({
+              action: "rematch_request",
+              from: currentPlayer.id,
+            })
+          );
+        }
+      }
+    } else if (action === "rematch_response") {
+      const { response } = data;
+      if (!currentRoom || !currentPlayer) return;
+
+      const requester = currentRoom.players.find(
+        (p) => p.id === currentRoom?.rematchRequestedBy
+      );
+      if (!requester) return;
+
+      if (response === "reject") {
+        requester.ws.send(
+          JSON.stringify({
+            action: "rematch_result",
+            result: "rejected",
+          })
+        );
+        currentRoom.rematchRequestedBy = undefined;
+        return;
+      } else {
+        requester.ws.send(
+          JSON.stringify({
+            action: "rematch_result",
+            result: "accepted",
+          })
+        );
+      }
+
+      // Swap symbols for fairness
+      for (const player of currentRoom.players) {
+        player.symbol = player.symbol === "X" ? "O" : "X";
+      }
+
+      const [pX, pO] = currentRoom.players.sort((a, b) =>
+        a.symbol === "X" ? -1 : 1
+      );
+
+      currentRoom.board = createEmptyBoard();
+      currentRoom.currentTurn = "X";
+      currentRoom.rematchRequestedBy = undefined;
+
+      try {
+        // ✅ Create a waiting game instead of full new game
+        currentRoom.gameId = await createWaitingGame(currentRoom.roomId, pX.id);
+        await updateGameStart(
+          currentRoom.gameId,
+          currentPlayer.id,
+          currentRoom.roomId
+        );
+        broadcastToRoom(currentRoom, {
+          action: "new_game",
+          result: "Starting a new game...",
+        });
+      } catch (e) {
+        return broadcastToRoom(currentRoom, {
+          action: "error",
+          error: "Failed to start new game",
+        });
+      }
+
+      // Inform players of new game state
+      for (const player of currentRoom.players) {
+        player.ws.send(
+          JSON.stringify({
+            action: "rematch_started",
+            board: currentRoom.board,
+            currentTurn: currentRoom.currentTurn,
+            role: player.symbol,
+          })
+        );
+      }
+    } else if (action === "quit") {
+      if (!currentRoom || !currentPlayer) return;
+
+      const otherPlayer = currentRoom.players.find(
+        (p) => p.id !== currentPlayer?.id
+      );
+
+      if (otherPlayer) {
+        otherPlayer.ws.send(
+          JSON.stringify({
+            action: "player_quit",
+            from: currentPlayer.id,
+            username: currentPlayer.username,
+          })
+        );
+      }
+
+      // Optionally: remove the quitting player from the room
+      currentRoom.players = currentRoom.players.filter(
+        (p) => p.id !== currentPlayer?.id
+      );
+
+      // Optionally: if the room is empty, delete it
+      if (currentRoom.players.length === 0) {
+        rooms.delete(currentRoom?.roomId); // Assuming you're using a `Map` called `rooms`
+      }
     }
   });
 

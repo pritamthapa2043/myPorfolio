@@ -43,6 +43,7 @@ export const updateUser = async (
   const sql = `update core.users set username=$1, email=$2 where id=$3 `;
   await query(sql, [username, email, id]);
 };
+
 export const deactivateUser = async (id: number, currentTime: string) => {
   const sql = `update core.users set deleted_at = $1 where id = $2 `;
   await query(sql, [currentTime, id]);

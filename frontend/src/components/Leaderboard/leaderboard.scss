@@ -1,0 +1,144 @@
+// components/leaderboard.scss
+.leaderboard {
+  max-width: 4xl;
+  margin: 0 auto;
+  padding: 1rem;
+  background-color: #242424;
+  // box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+  //   0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  border-radius: 0.375rem;
+  color: #e5e7eb;
+
+  &__title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 1rem;
+    color: #ffffff;
+  }
+
+  &__table-container {
+    overflow-x: auto;
+  }
+
+  &__table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 100%;
+    text-align: center; // Added center alignment
+
+    thead {
+      tr {
+        background-color: #1a1a1a;
+        text-align: left;
+        font-size: 0.75rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+    }
+
+    th {
+      padding: 0.5rem 1rem;
+      text-align: center; // Center headers
+
+      &:not(:last-child) {
+        padding-right: 2rem;
+      }
+    }
+
+    tbody {
+      tr {
+        font-size: 0.875rem;
+
+        &:nth-child(even) {
+          background-color: #2a2a2a;
+        }
+
+        &:nth-child(odd) {
+          background-color: #242424;
+        }
+
+        &:hover {
+          background-color: #333;
+        }
+
+        // Medal styles for top 3
+        &:nth-child(1) td:first-child::before {
+          content: "🥇 ";
+        }
+        &:nth-child(2) td:first-child::before {
+          content: "🥈 ";
+        }
+        &:nth-child(3) td:first-child::before {
+          content: "🥉 ";
+        }
+      }
+
+      td {
+        padding: 0.5rem 1rem;
+
+        &:not(:last-child) {
+          padding-right: 2rem;
+        }
+
+        &:first-child {
+          font-weight: 500;
+          color: #d1d5db;
+        }
+
+        &:last-child {
+          font-weight: 600;
+          color: #f59e0b;
+        }
+      }
+    }
+  }
+}
+
+.leaderboard {
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+  }
+
+  &__refresh-btn {
+    padding: 0.5rem 1rem;
+    background-color: #f59e0b;
+    color: white;
+    border: none;
+    border-radius: 0.25rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s;
+
+    &:hover {
+      background-color: #d97706;
+    }
+
+    &:disabled {
+      background-color: #9ca3af;
+      cursor: not-allowed;
+    }
+  }
+
+  &__loading,
+  &__refetching,
+  &__error {
+    padding: 2rem;
+    text-align: center;
+    background-color: #2a2a2a;
+    border-radius: 0.375rem;
+    margin-top: 1rem;
+  }
+
+  &__error {
+    color: #ef4444;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    align-items: center;
+  }
+}

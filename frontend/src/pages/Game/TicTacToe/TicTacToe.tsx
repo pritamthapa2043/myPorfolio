@@ -1,19 +1,21 @@
-import  { useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import TicTacToeBoard from "../../../components/TictacToeBoard/TicTacToeBoard";
 import TicTacToeOnlineBoard from "../../../components/TictacToeBoard/TicTacToeOnlineBoard";
+import { handleRoomExist } from "../../../api/api";
 
 const TicTacToe = () => {
   const userId = parseInt(localStorage.getItem("userId") || "0");
   const username = localStorage.getItem("username");
 
   const navigate = useNavigate();
-  const [isGameMenu, setIsGameMenu] = useState(false);
+  const [isGameMenu, setIsGameMenu] = useState(true);
   const [gameMode, setGameMode] = useState("LOCAL");
   const [Player1, setPlayer1] = useState("");
   const [Player2, setPlayer2] = useState("");
   const [roomId, setRoomId] = useState("");
   const [isJoining, setIsJoining] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   const handleDecrease = () => {
     setGameMode("LOCAL");
@@ -30,10 +32,34 @@ const TicTacToe = () => {
     }
     return result;
   }
+  const handleQuit = () => {
+    setIsGameMenu(true);
+    setRoomId("");
+    setErrorMessage("");
+  };
 
+  const handlePlayGame = async () => {
+    if (!isJoining) {
+      const result = await handleRoomExist(roomId);
+      if (result.message === "Room does not exist") {
+        setIsGameMenu(false);
+        setErrorMessage("");
+      } else {
+        setErrorMessage("Room ID alredy exist. Create new one");
+      }
+    } else {
+      const result = await handleRoomExist(roomId);
+      if (result.message === "Room does not exist") {
+        setErrorMessage(result.message);
+      } else {
+        setIsGameMenu(false);
+        setErrorMessage("");
+      }
+    }
+  };
   return (
     <div style={{ width: "100%", height: "100%" }}>
-      {!isGameMenu && (
+      {isGameMenu && (
         <div>
           <h1>Tic Tac Toe Dashboard</h1>
 
@@ -91,6 +117,7 @@ const TicTacToe = () => {
                       onChange={(e) => setRoomId(e.target.value.toUpperCase())}
                       placeholder="Enter Room ID"
                     />
+                    {errorMessage && <span>{errorMessage}</span>}
                   </div>
                 ) : (
                   <div>
@@ -98,27 +125,28 @@ const TicTacToe = () => {
                       Room ID: <strong>{roomId}</strong>
                     </span>
                     <p>Share this ID with a friend to join!</p>
+                    {errorMessage && <span>{errorMessage}</span>}
                   </div>
                 )}
               </>
             )}
           </div>
-          <button>LeaderBoard</button>
+          <button onClick={() => navigate("leaderboard")}>LeaderBoard</button>
 
-          <button onClick={() => setIsGameMenu(true)}>Play Game</button>
+          <button onClick={() => handlePlayGame()}>Play Game</button>
 
           <button onClick={() => navigate("/game")}>Exit</button>
         </div>
       )}
-      {isGameMenu && gameMode === "LOCAL" && (
+      {!isGameMenu && gameMode === "LOCAL" && (
         <TicTacToeBoard player1={Player1} player2={Player2} />
       )}
-      {isGameMenu && gameMode === "ONLINE" && (
+      {!isGameMenu && gameMode === "ONLINE" && (
         <TicTacToeOnlineBoard
           roomId={roomId}
           playerId={userId}
           username={username}
-          // isJoining={isJoining}
+          handleQuit={handleQuit}
         />
       )}
     </div>

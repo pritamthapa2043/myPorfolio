@@ -10,5 +10,5 @@ CREATE Table if not exists tic_tac_toe.games(
 
 export const alterTicTacToeGamesTable = `
 Alter Table tic_tac_toe.games 
-add column room_id varchar(10) unique NOT NULL;
+add column room_id varchar(10) NOT NULL;
 `;
