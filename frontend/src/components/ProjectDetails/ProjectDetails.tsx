@@ -1,4 +1,23 @@
 import { motion } from "motion/react";
+
+interface Tag {
+  id: number;
+  name: string;
+  Icon?: React.FC;
+}
+
+interface ProjectDetails {
+  title: string;
+  description: string;
+  subDescription: string;
+  image: string;
+  tags: Tag[];
+  href: string;
+  isViewProject: boolean;
+  closeModal: () => void;
+  nda?: string;
+}
+
 const ProjectDetails = ({
   title,
   description,
@@ -6,8 +25,10 @@ const ProjectDetails = ({
   image,
   tags,
   href,
+  isViewProject,
+  nda,
   closeModal,
-}) => {
+}: ProjectDetails) => {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center w-full h-full overflow-hidden backdrop-blur-sm">
       <motion.div
@@ -25,24 +46,34 @@ const ProjectDetails = ({
         <div className="p-5">
           <h5 className="mb-2 text-2xl font-bold text-white">{title}</h5>
           <p className="mb-3 font-normal text-neutral-400">{description}</p>
-          {subDescription.map((subDesc, index) => (
-            <p className="mb-3 font-normal text-neutral-400">{subDesc}</p>
-          ))}
+
+          <p className="mb-3 font-normal text-neutral-400">{subDescription}</p>
+          <p className="mb-3 font-normal italic text-neutral-400">{nda}</p>
+
           <div className="flex items-center justify-between mt-4">
             <div className="flex gap-3">
-              {tags.map((tag) => (
-                <img
-                  key={tag.id}
-                  src={tag.path}
-                  alt={tag.name}
-                  className="rounded-lg size-10 hover-animation"
-                />
-              ))}
+              {tags.map(
+                (tag) =>
+                  tag.Icon && (
+                    <span
+                      className="rounded-lg px-2 hover-animation"
+                      title={tag.name}
+                      key={tag.id}
+                    >
+                      <tag.Icon />
+                    </span>
+                  )
+              )}
             </div>
-            <a className="inline-flex items-center gap-1 font-medium cursor-pointer hover-animation">
-              View Project{" "}
-              <img src="assets/arrow-up.svg" className="size-4" href={href} />
-            </a>
+            {isViewProject && (
+              <a
+                href={href}
+                className="inline-flex items-center gap-1 font-medium cursor-pointer hover-animation"
+              >
+                View Project
+                <img src="assets/arrow-up.svg" className="size-4" />
+              </a>
+            )}
           </div>
         </div>
       </motion.div>
