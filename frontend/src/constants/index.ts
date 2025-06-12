@@ -166,29 +166,31 @@ export const mySocials = [
 
 export const experiences = [
   {
-    company: "SonicBolt Technologies LLP",
-    title: "Software Developer",
-    job: "BIM (Building Information Modeling)",
-    date: "2021-2022",
-    contents: [
-      "Enhanced application security and developed new features, adhering to standards set by the Passive Defense Organization and National Cyberspace Center.",
-      "Designed and implemented intuitive map interfaces using MapsUI, enhancing user experience and enabling seamless interactive map integration.",
-      "Developed applications for industrial automation, leveraging C++ and the Fatek API for PLC communication.",
-      "Enhanced responsiveness and usability of applications using Windows Forms and WPF frameworks.",
-      "Executed XML to SVG conversions using X-DOM, ensuring dynamic and efficient data visualization.",
-    ],
-  },
-  {
+    id: 1,
     company: "SonicBolt Technologies LLP",
     title: "Fullstack Developer",
-    job: "Asset Management",
-    date: "2023-Present",
+    date: "2021-Present",
     contents: [
-      "Engineered systems for large-scale data ingestion and analysis, ensuring efficient data processing and storage.",
-      "Developed back-end systems enabling vehicle-to-cloud communication for telemetry, diagnostics, and remote control:",
-      "✅ Implemented secure APIs, following ISO 26262 automotive safety standards.",
-      "✅ Ensured data privacy for customers and partners through industry-compliant protocols.",
-      "✅ Delivered remote features like over-the-air updates, real-time tracking, and remote start capabilities.",
+      {
+        id: 1,
+        projectName: "Asset Management",
+        work: [
+          "Led end-to-end development of Asset Management module, including REST API design, database schema, and interactive React UI deployment",
+          "Reduced query latency by 60% by designing optimized PostgreSQL data models, REST APIs, and indexing strategies",
+          "Developed WebSocket APIs for real-time CSV import of over 2,000 assets data with live progress tracking",
+          "Developed core UI framework with 10+ reusable components (tables, filters, export tools, CSV importers). adopted across multiple modules",
+          "Conducted rigorous load testing using JMeter, validating system stability and performance under load (200+ concurrent users).",
+        ],
+      },
+      {
+        id: 2,
+        projectName: "BIM (Building Information Modeling)",
+        work: [
+          "Led the end-to-end development of the BIM module, including REST API design, database schema, and interactive React UI deployment",
+          "Developed interactive 3D model visualization within the React application using React Three Fiber (R3F) and Three.js.",
+          "Optimized 3D model loading through LOD techniques and mesh compression, improving render speed by 45%",
+        ],
+      },
     ],
   },
 ];
