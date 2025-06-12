@@ -40,7 +40,7 @@ const Intro = () => {
             {inView && (
               <Float>
                 <HotAirBallon
-                  scale={isMobile && 0.7}
+                  scale={isMobile && 1}
                   position={isMobile && [0, -1.5, 0]}
                   visible={inView}
                 />
