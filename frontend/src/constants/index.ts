@@ -6,7 +6,6 @@ import {
   SiExpress,
   SiNodedotjs,
   SiThreedotjs,
-  SiGit,
   SiSocketdotio,
   SiCss3,
   SiTailwindcss,
@@ -50,11 +49,6 @@ export const myProjects = [
         name: "PostgreSQL",
         Icon: SiPostgresql,
       },
-      {
-        id: 6,
-        name: "Git",
-        Icon: SiGit,
-      },
     ],
   },
   {
@@ -97,16 +91,6 @@ export const myProjects = [
         name: "Express",
         Icon: SiExpress,
       },
-      {
-        id: 7,
-        name: "PostgreSQL",
-        Icon: SiPostgresql,
-      },
-      {
-        id: 8,
-        name: "Git",
-        Icon: SiGit,
-      },
     ],
   },
   {
@@ -146,11 +130,6 @@ export const myProjects = [
         id: 5,
         name: "PostgreSQL",
         Icon: SiPostgresql,
-      },
-      {
-        id: 6,
-        name: "Git",
-        Icon: SiGit,
       },
     ],
   },
