@@ -7,21 +7,20 @@ import {
   SiNodedotjs,
   SiThreedotjs,
   SiGit,
-  SiJira,
   SiSocketdotio,
+  SiCss3,
+  SiTailwindcss,
 } from "react-icons/si";
 
 export const myProjects = [
   {
-    id: 3,
+    id: 1,
     title: "TIC TAC TOE",
     description: "A lightweight game.",
-    subDescription: [
-      "Built a powerful rendering engine using OpenGL and C++.",
-      "Developed a physics engine with collision detection and particle effects.",
-      "Implemented a scripting system for easy game customization.",
-      "Optimized performance with multi-threading and efficient memory management.",
-    ],
+    subDescription:
+      "An interactive, real-time Tic-Tac-Toe game with online multiplayer support. Built with React, WebSocket, and PostgreSQL, it allows players to join or create private game rooms, play competitively, and view a live leaderboard showcasing player rankings, wins, losses, and draws. The game features smooth animations, responsive design, and real-time synchronization between players for a seamless experience.",
+
+    isViewProject: true,
     href: "",
     logo: "",
     image: "/assets/projects/game-engine.jpg",
@@ -29,32 +28,129 @@ export const myProjects = [
       {
         id: 1,
         name: "React",
-        path: "/assets/logos/cplusplus.svg",
+        Icon: SiReact,
       },
       {
         id: 2,
         name: "Typescript",
-        path: "/assets/logos/csharp.svg",
+        Icon: SiTypescript,
       },
       {
         id: 3,
         name: "WebScoket",
-        path: "/assets/logos/git.svg",
+        Icon: SiSocketdotio,
       },
       {
         id: 4,
         name: "Express",
-        path: "/assets/logos/git.svg",
+        Icon: SiExpress,
       },
       {
         id: 5,
         name: "PostgreSQL",
-        path: "/assets/logos/git.svg",
+        Icon: SiPostgresql,
       },
       {
         id: 6,
         name: "Git",
-        path: "/assets/logos/microsoft.svg",
+        Icon: SiGit,
+      },
+    ],
+  },
+  {
+    id: 2,
+    title: "BIM (Building Information Modeling)",
+    description: "A Web Application.",
+    subDescription:
+      "BIM is a digital representation of a building’s physical and functional characteristics, used to visualize asset placement, support maintenance, and ensure spatial coordination throughout construction and operation.",
+    nda: "(Work done under NDA at Sonicbolt Technologies LLP. Details simplified for confidentiality.)",
+    isViewProject: false,
+    href: "",
+    logo: "",
+    image: "/assets/projects/game-engine.jpg",
+    tags: [
+      {
+        id: 1,
+        name: "React",
+        Icon: SiReact,
+      },
+      {
+        id: 2,
+        name: "Typescript",
+        Icon: SiTypescript,
+      },
+      {
+        id: 3,
+        name: "Three.js",
+        Icon: SiThreedotjs,
+      },
+      {
+        id: 4,
+        name: "React Three Fiber",
+      },
+      {
+        id: 5,
+        name: "GSAP",
+      },
+      {
+        id: 6,
+        name: "Express",
+        Icon: SiExpress,
+      },
+      {
+        id: 7,
+        name: "PostgreSQL",
+        Icon: SiPostgresql,
+      },
+      {
+        id: 8,
+        name: "Git",
+        Icon: SiGit,
+      },
+    ],
+  },
+  {
+    id: 3,
+    title: "Asset Management",
+    description: "A Web Application.",
+    subDescription:
+      "A secure, scalable platform for tracking physical assets with real-time updates. Features include inventory management, audit logs, reporting, and role-based access control. Built with React, Express.js, and PostgreSQL for robust data integrity, with SSE (Server-Sent Events) and WebSocket for live tracking and notifications. Optimized for performance and real-time analytics.",
+    nda: "(Work done under NDA at Sonicbolt Technologies LLP. Details simplified for confidentiality.)",
+    isViewProject: false,
+    href: "",
+    logo: "",
+    image: "/assets/projects/game-engine.jpg",
+    tags: [
+      {
+        id: 1,
+        name: "React",
+        Icon: SiReact,
+      },
+      {
+        id: 2,
+        name: "Typescript",
+        Icon: SiTypescript,
+      },
+      {
+        id: 3,
+        name: "WebScoket",
+        Icon: SiSocketdotio,
+      },
+      {
+        id: 4,
+        name: "Express",
+        Icon: SiExpress,
+      },
+
+      {
+        id: 5,
+        name: "PostgreSQL",
+        Icon: SiPostgresql,
+      },
+      {
+        id: 6,
+        name: "Git",
+        Icon: SiGit,
       },
     ],
   },
@@ -72,7 +168,7 @@ export const experiences = [
   {
     company: "SonicBolt Technologies LLP",
     title: "Software Developer",
-    job: "BIM (Building Integration Modeling)",
+    job: "BIM (Building Information Modeling)",
     date: "2021-2022",
     contents: [
       "Enhanced application security and developed new features, adhering to standards set by the Passive Defense Organization and National Cyberspace Center.",
@@ -101,11 +197,12 @@ export const myTechStack = [
   { name: "React", Icon: SiReact, color: "#61DAFB" },
   { name: "JavaScript", Icon: SiJavascript, color: "#F7DF1E" },
   { name: "TypeScript", Icon: SiTypescript, color: "#3178C6" },
-  { name: "PostgreSQL", Icon: SiPostgresql, color: "#61DAFB" },
-  { name: "Express.js", Icon: SiExpress, color: "#FFFFFF" },
+  { name: "CSS", Icon: SiCss3, color: "#1572B6" },
+  { name: "Tailwind CSS", Icon: SiTailwindcss, color: "#06B6D4" },
   { name: "Node.js", Icon: SiNodedotjs, color: "#339933" },
+  { name: "Express.js", Icon: SiExpress, color: "#FFFFFF" },
   { name: "Socket.IO", Icon: SiSocketdotio, color: "#FFFFFF" },
+  { name: "PostgreSQL", Icon: SiPostgresql, color: "#4169E1" },
   { name: "three.js", Icon: SiThreedotjs, color: "#FFFFFF" },
-  { name: "Git", Icon: SiGit, color: "#F05032" },
-  { name: "Jira", Icon: SiJira, color: "#0052CC" },
+  { name: "React Three Fiber", Icon: SiThreedotjs, color: "#FFFFFF" },
 ];

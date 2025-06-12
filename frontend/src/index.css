@@ -1,5 +1,16 @@
-@import url("https://fonts.googleapis.com/css2?family=Funnel+Display:wght@300..800&display=swap");
+/* @import url("https://fonts.googleapis.com/css2?family=Funnel+Display:wght@300..800&display=swap"); */
+
+@import url("https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700&display=swap");
+
 @import "tailwindcss";
+
+body {
+  background: #030412;
+  font-family: "Nunito", sans-serif;
+  color: white;
+  scroll-behavior: smooth;
+  overflow-x: hidden;
+}
 
 @theme {
   --color-primary: #030412;
@@ -146,14 +157,6 @@
 
 .tech-icon {
   @apply bg-white/15 backdrop-blur-md p-4 rounded-xl flex items-center justify-center transition;
-}
-
-body {
-  background: #030412;
-  font-family: "Funnel Display", sans-serif;
-  color: white;
-  scroll-behavior: smooth;
-  overflow-x: hidden;
 }
 
 @keyframes shake {

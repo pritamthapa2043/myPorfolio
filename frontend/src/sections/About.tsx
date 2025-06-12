@@ -1,17 +1,27 @@
-import { Suspense, useRef } from "react";
+import { lazy, Suspense, useRef } from "react";
 import Card from "../components/Card/Card";
 import { myTechStack } from "../constants";
-import { motion } from "framer-motion";
+import { useInView } from "framer-motion";
 import { HiOutlineDocumentDownload } from "react-icons/hi";
 import { Canvas } from "@react-three/fiber";
 import { Float, OrbitControls, Stars } from "@react-three/drei";
-import { Astro } from "../components/Astro/Astro";
+
+const LazyModel = lazy(() => import("../components/Astro/Astro"));
 
 const About = () => {
   const grid2Container = useRef<HTMLDivElement>(null);
-  const techItems = [...myTechStack, ...myTechStack];
+
+  const ref = useRef(null);
+  const inView = useInView(ref, {
+    margin: "0px 0px -10% 0px",
+    once: false,
+  });
   return (
-    <section className="relative c-space section-spacing  " id="about">
+    <section
+      ref={ref}
+      className="relative c-space section-spacing  "
+      id="about"
+    >
       <h2 className="text-heading">About Me</h2>
 
       <div className="relative grid grid-cols-4 gap-4 md:grid-cols-6 md:grid-rows-4 mt-16">
@@ -24,10 +34,10 @@ const About = () => {
           <div className="z-10">
             <p className="headtext">Hi, I'm Pritam Thaoa - Module Lead</p>
             <p className="subtext">
-              Full-stack Developer with 3 years of experience building dynamic
-              web applications. Skilled in both front-end and back-end
-              development, continuously improving through new technologies and
-              hands-on problem-solving.
+              Full-stack Developer with 3 years of experience building scalable,
+              real-time web applications using modern React/Node stacks. Focused
+              on clean code architecture and performance-driven user experiences
+              across the full development lifecycle.
             </p>
           </div>
           <div className="absolute inset-x-0 pointer-evets-none -bottom-4 h-1/2 sm:h-1/3 bg-gradient-to-t from-indigo" />
@@ -69,7 +79,7 @@ const About = () => {
           </div>
         </div>
         {/* Grid 3 */}
-        <div className=" grid-3">
+        <div className="grid-3">
           <figure
             className="absolute inset-0"
             style={{ width: "100%", height: "100%" }}
@@ -86,10 +96,11 @@ const About = () => {
                 speed={1}
               />
               <Suspense fallback={null}>
-                <Float>
-                  <Astro />
-                </Float>
-                {/* <Rig /> */}
+                {inView && (
+                  <Float>
+                    <LazyModel visible={inView} />
+                  </Float>
+                )}
               </Suspense>
               <OrbitControls enablePan={false} />
             </Canvas>
@@ -98,7 +109,7 @@ const About = () => {
 
         {/* Grid 4 */}
         <div className="grid-default-color grid-4 ">
-          <p className="text-xl font-semibold mb-4">My Time Zone</p>
+          <p className="text-xl  mb-4">My Time Zone</p>
           <div className="flex items-center space-x-3">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -123,7 +134,7 @@ const About = () => {
 
         {/* Grid 4 */}
         <div className="grid-default-color grid-4">
-          <p className="text-xl font-semibold mb-4 text-white">Resume</p>
+          <p className="text-xl  mb-4 text-white">Resume</p>
           <a
             href="/assets/Pritam_Thapa_Resume.pdf"
             download
@@ -138,41 +149,16 @@ const About = () => {
 
         {/* Grid 5 */}
         <div className="grid-gray-color grid-5">
-          <p className="text-xl font-semibold mb-4 text-white">Tech Stack</p>
-          <div className="gap-4">
-            <motion.div
-              className="overflow-hidden"
-              style={{
-                maskImage:
-                  "linear-gradient(to right, transparent, white 20%, white 80%, transparent)",
-              }}
-            >
-              <motion.div
-                className="flex gap-6"
-                animate={{ x: ["0%", "-50%"] }}
-                transition={{
-                  repeat: Infinity,
-                  duration: 15,
-                  ease: "linear",
-                }}
-              >
-                {techItems.map(({ name, Icon, color }, index) => (
-                  <motion.div
-                    key={name + index}
-                    className="tech-icon"
-                    initial={{ scale: 0.8, rotate: 0 }}
-                    animate={{ rotate: [0, 10, -10, 0] }}
-                    transition={{
-                      repeat: Infinity,
-                      duration: 4,
-                      ease: "easeInOut",
-                    }}
-                  >
-                    <Icon size={50} color={color} />
-                  </motion.div>
-                ))}
-              </motion.div>
-            </motion.div>
+          <p className="text-xl  mb-2 text-white">Tech Stack</p>
+          <div className="flex  justify-center gap-8 p-4">
+            {myTechStack.map(({ name, Icon, color }) => (
+              <div key={name} className="flex flex-col items-center w-20">
+                <Icon size={45} color={color} />
+                <span className="mt-2 text-xs text-center text-neutral-300 ">
+                  {name}
+                </span>
+              </div>
+            ))}
           </div>
         </div>
       </div>

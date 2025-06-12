@@ -3,7 +3,7 @@ import { useGLTF, useAnimations } from "@react-three/drei";
 import { useMotionValue, useSpring } from "framer-motion";
 import { useFrame } from "@react-three/fiber";
 
-export function Astro(props) {
+export default function Astro({ visible = true, ...props }) {
   const group = useRef(null);
   const { nodes, materials, animations } = useGLTF(
     "/models/robot_playground.glb"
@@ -11,21 +11,28 @@ export function Astro(props) {
   const { actions } = useAnimations(animations, group);
 
   useEffect(() => {
-    if (animations.length > 0) {
+    if (animations.length > 0 && visible) {
       actions[animations[0].name]?.play();
+    } else {
+      actions[animations[0].name]?.stop();
     }
-  }, [actions, animations]);
+  }, [actions, animations, visible]);
 
   const yPosition = useMotionValue(5);
   const ySpring = useSpring(yPosition, { damping: 50 });
+
   useEffect(() => {
     ySpring.set(-1);
   }, [ySpring]);
+
   useFrame(() => {
-    if (group.current) {
-      group.current.position.y = ySpring.get();
-    }
+    if (!visible || !group.current) return;
+
+    group.current.position.y = ySpring.get();
   });
+
+  if (!visible) return null;
+
   return (
     <group ref={group} {...props} dispose={null}>
       <group name="Sketchfab_Scene">

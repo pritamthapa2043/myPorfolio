@@ -1,7 +1,34 @@
 import React, { useState } from "react";
 import ProjectDetails from "../ProjectDetails/ProjectDetails";
 
-const Project = ({ title, description, subDescription, href, image, tags }) => {
+interface Tag {
+  id: number;
+  name: string;
+  Icon?: React.FC;
+}
+
+interface Project {
+  title: string;
+  description: string;
+  subDescription: string;
+  image: string;
+  tags: Tag[];
+  logo: string;
+  href: string;
+  isViewProject: boolean;
+  nda?: string;
+}
+
+const Project = ({
+  title,
+  description,
+  subDescription,
+  href,
+  image,
+  tags,
+  isViewProject,
+  nda,
+}: Project) => {
   const [isHidden, setIsHidden] = useState(false);
   return (
     <>
@@ -31,7 +58,9 @@ const Project = ({ title, description, subDescription, href, image, tags }) => {
           image={image}
           tags={tags}
           href={href}
+          isViewProject={isViewProject}
           closeModal={() => setIsHidden(false)}
+          nda={nda}
         />
       )}
     </>

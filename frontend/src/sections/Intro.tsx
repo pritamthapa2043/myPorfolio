@@ -2,15 +2,30 @@ import { Canvas, useFrame } from "@react-three/fiber";
 import { Float } from "@react-three/drei";
 import { useMediaQuery } from "react-responsive";
 import { easing } from "maath";
-import { Suspense } from "react";
+import { lazy, Suspense, useRef } from "react";
 import IntroText from "../components/IntroText/IntroText";
 import ParallaxBackground from "../components/ParallaxBackground/ParallaxBackground";
-import { Model } from "../components/Model/Model";
+
+import { useInView } from "framer-motion";
+const LazyModel = lazy(() => import("../components/HotAirBallon/HotAirBallon"));
+
+interface RigProps {
+  active?: boolean;
+}
 
 const Intro = () => {
   const isMobile = useMediaQuery({ maxWidth: 853 });
+  const ref = useRef(null);
+  const inView = useInView(ref, {
+    margin: "0px 0px -10% 0px",
+    once: false,
+  });
+
   return (
-    <section className="flex items-start justify-center min-h-screen overflow-hidden md:items-start md:justify-start c-space">
+    <section
+      ref={ref}
+      className="flex items-start justify-center min-h-screen overflow-hidden md:items-start md:justify-start c-space"
+    >
       <IntroText />
       <ParallaxBackground />
       <figure
@@ -20,13 +35,16 @@ const Intro = () => {
         <Canvas camera={{ position: [0, 1, 3] }}>
           <ambientLight intensity={3} />
           <Suspense fallback={null}>
-            <Float>
-              <Model
-                scale={isMobile && 0.7}
-                position={isMobile && [0, -1.5, 0]}
-              />
-            </Float>
-            <Rig />
+            {inView && (
+              <Float>
+                <LazyModel
+                  scale={isMobile && 0.7}
+                  position={isMobile && [0, -1.5, 0]}
+                  visible={inView}
+                />
+              </Float>
+            )}
+            <Rig active={inView} />
           </Suspense>
         </Canvas>
       </figure>
@@ -34,8 +52,10 @@ const Intro = () => {
   );
 };
 
-function Rig() {
-  return useFrame((state, delta) => {
+const Rig: React.FC<RigProps> = ({ active = true }) => {
+  useFrame((state, delta) => {
+    if (!active) return;
+
     easing.damp3(
       state.camera.position,
       [state.pointer.x / 5, 1 + state.pointer.y / 5, 3],
@@ -43,6 +63,8 @@ function Rig() {
       delta
     );
   });
-}
+
+  return null;
+};
 
 export default Intro;
