@@ -6,7 +6,7 @@ import { HiOutlineDocumentDownload } from "react-icons/hi";
 import { Canvas } from "@react-three/fiber";
 import { Float, OrbitControls, Stars } from "@react-three/drei";
 
-const LazyModel = lazy(() => import("../components/Astro/Astro"));
+const Astro = lazy(() => import("../components/Astro/Astro"));
 
 const About = () => {
   const grid2Container = useRef<HTMLDivElement>(null);
@@ -98,7 +98,7 @@ const About = () => {
               <Suspense fallback={null}>
                 {inView && (
                   <Float>
-                    <LazyModel visible={inView} />
+                    <Astro visible={inView} />
                   </Float>
                 )}
               </Suspense>
@@ -136,14 +136,13 @@ const About = () => {
         <div className="grid-default-color grid-4">
           <p className="text-xl  mb-4 text-white">Resume</p>
           <a
-            href="/assets/Pritam_Thapa_Resume.pdf"
+            href="/public/assets/resume/PritamThapa-Resume.pdf"
             download
             className="download-button"
           >
             <span>
               <HiOutlineDocumentDownload className="w-6 h-6" />
             </span>
-            {/* <span className="text-base  font-medium">Download Resume</span> */}
           </a>
         </div>
 

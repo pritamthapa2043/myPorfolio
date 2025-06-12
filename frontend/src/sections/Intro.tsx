@@ -5,9 +5,11 @@ import { easing } from "maath";
 import { lazy, Suspense, useRef } from "react";
 import IntroText from "../components/IntroText/IntroText";
 import ParallaxBackground from "../components/ParallaxBackground/ParallaxBackground";
-
 import { useInView } from "framer-motion";
-const LazyModel = lazy(() => import("../components/HotAirBallon/HotAirBallon"));
+
+const HotAirBallon = lazy(
+  () => import("../components/HotAirBallon/HotAirBallon")
+);
 
 interface RigProps {
   active?: boolean;
@@ -37,13 +39,14 @@ const Intro = () => {
           <Suspense fallback={null}>
             {inView && (
               <Float>
-                <LazyModel
+                <HotAirBallon
                   scale={isMobile && 0.7}
                   position={isMobile && [0, -1.5, 0]}
                   visible={inView}
                 />
               </Float>
             )}
+
             <Rig active={inView} />
           </Suspense>
         </Canvas>
