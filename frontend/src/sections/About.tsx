@@ -24,7 +24,7 @@ const About = () => {
 
       <div className="relative grid grid-cols-1 gap-4 md:grid-cols-6 md:grid-rows-4 mt-16">
         {/* Grid 1 */}
-        <div className="flex flex-col justify-end p-6 relative overflow-hidden row-span-4 md:col-span-3 h-[20rem] md:h-full bg-gradient-to-b from-gray-800 to-gray-950 rounded-2xl">
+        <div className="flex flex-col justify-end p-6 relative overflow-hidden row-span-4 md:col-span-3 h-[20rem] md:h-full bg-gradient-to-b from-gray-800 to-gray-950 rounded-2xl ">
           <img
             src="assets/coding-pov.png"
             className="absolute scale-[1.75] -right-[5rem] -top-[1rem] md:scale-[3] md:left-50 md:inset-y-10 lg:scale-[2.5]"

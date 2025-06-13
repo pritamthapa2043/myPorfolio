@@ -1,4 +1,5 @@
 import { motion } from "motion/react";
+import { useNavigate } from "react-router-dom";
 
 interface Tag {
   id: number;
@@ -12,7 +13,7 @@ interface ProjectDetails {
   subDescription: string;
   image: string;
   tags: Tag[];
-  href: string;
+  nav: string;
   isViewProject: boolean;
   closeModal: () => void;
   nda?: string;
@@ -24,11 +25,12 @@ const ProjectDetails = ({
   subDescription,
   image,
   tags,
-  href,
+  nav,
   isViewProject,
   nda,
   closeModal,
 }: ProjectDetails) => {
+  const navigate = useNavigate();
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center w-full h-full overflow-hidden backdrop-blur-sm">
       <motion.div
@@ -66,13 +68,13 @@ const ProjectDetails = ({
               )}
             </div>
             {isViewProject && (
-              <a
-                href={href}
+              <button
+                onClick={() => navigate(nav)}
                 className="inline-flex items-center gap-1 font-medium cursor-pointer hover-animation"
               >
                 View Project
                 <img src="assets/arrow-up.svg" className="size-4" />
-              </a>
+              </button>
             )}
           </div>
         </div>

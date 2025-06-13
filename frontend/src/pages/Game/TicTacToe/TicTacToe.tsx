@@ -17,21 +17,19 @@ const TicTacToe = () => {
   const [isJoining, setIsJoining] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
-  const handleDecrease = () => {
-    setGameMode("LOCAL");
-  };
-  const handleIncrease = () => {
-    setGameMode("ONLINE");
+  const toggleGameMode = () => {
+    setGameMode((prevMode) => (prevMode === "LOCAL" ? "ONLINE" : "LOCAL"));
   };
 
-  function generateRoomId(length = 6) {
+  const generateRoomId = (length = 6) => {
     const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
     let result = "";
     for (let i = 0; i < length; i++) {
       result += chars.charAt(Math.floor(Math.random() * chars.length));
     }
     return result;
-  }
+  };
+
   const handleQuit = () => {
     setIsGameMenu(true);
     setRoomId("");
@@ -39,16 +37,15 @@ const TicTacToe = () => {
   };
 
   const handlePlayGame = async () => {
+    const result = await handleRoomExist(roomId);
     if (!isJoining) {
-      const result = await handleRoomExist(roomId);
       if (result.message === "Room does not exist") {
         setIsGameMenu(false);
         setErrorMessage("");
       } else {
-        setErrorMessage("Room ID alredy exist. Create new one");
+        setErrorMessage("Room ID already exists. Create a new one.");
       }
     } else {
-      const result = await handleRoomExist(roomId);
       if (result.message === "Room does not exist") {
         setErrorMessage(result.message);
       } else {
@@ -57,97 +54,159 @@ const TicTacToe = () => {
       }
     }
   };
+
   return (
-    <div style={{ width: "100%", height: "100%" }}>
+    <div className="relative w-screen h-screen overflow-hidden bg-gray-700 text-white">
+      {/* Background Grid */}
       {isGameMenu && (
-        <div>
-          <h1>Tic Tac Toe Dashboard</h1>
-
-          <div className="board-size-container">
-            <button onClick={handleDecrease}>{`<`}</button>
-            <div>{gameMode}</div>
-            <button onClick={handleIncrease}>{`>`}</button>
-            {gameMode === "LOCAL" && (
-              <>
-                <span>Player 1 Name:</span>
-                <input
-                  type="text"
-                  placeholder="Player 1"
-                  value={Player1}
-                  onChange={(e) => setPlayer1(e.target.value)}
-                />
-                <span>Player 1 Name:</span>
-                <input
-                  type="text"
-                  placeholder="Player 2"
-                  value={Player2}
-                  onChange={(e) => setPlayer2(e.target.value)}
-                />
-              </>
-            )}
-            {gameMode === "ONLINE" && (
-              <>
-                <div>
-                  <button
-                    onClick={() => {
-                      const newRoomId = generateRoomId();
-                      setRoomId(newRoomId);
-                      setIsJoining(false);
-                    }}
-                  >
-                    Create Room
-                  </button>
-
-                  <button
-                    onClick={() => {
-                      setRoomId("");
-                      setIsJoining(true);
-                    }}
-                  >
-                    Join Room
-                  </button>
-                </div>
-
-                {isJoining ? (
-                  <div>
-                    <span>Enter Room ID:</span>
-                    <input
-                      type="text"
-                      value={roomId}
-                      onChange={(e) => setRoomId(e.target.value.toUpperCase())}
-                      placeholder="Enter Room ID"
-                    />
-                    {errorMessage && <span>{errorMessage}</span>}
-                  </div>
-                ) : (
-                  <div>
-                    <span>
-                      Room ID: <strong>{roomId}</strong>
-                    </span>
-                    <p>Share this ID with a friend to join!</p>
-                    {errorMessage && <span>{errorMessage}</span>}
-                  </div>
-                )}
-              </>
-            )}
-          </div>
-          <button onClick={() => navigate("leaderboard")}>LeaderBoard</button>
-
-          <button onClick={() => handlePlayGame()}>Play Game</button>
-
-          <button onClick={() => navigate("/game")}>Exit</button>
+        <div className="absolute inset-0 grid grid-cols-14 grid-rows-8 ">
+          {[...Array(112)].map((_, i) => (
+            <div
+              key={i}
+              className="border border-white/15 transition transform hover:scale-125 hover:-translate-y-1 hover:bg-white/10 duration-300 ease-out"
+            />
+          ))}
         </div>
       )}
-      {!isGameMenu && gameMode === "LOCAL" && (
-        <TicTacToeBoard player1={Player1} player2={Player2} />
-      )}
-      {!isGameMenu && gameMode === "ONLINE" && (
-        <TicTacToeOnlineBoard
-          roomId={roomId}
-          playerId={userId}
-          username={username}
-          handleQuit={handleQuit}
-        />
+
+      {isGameMenu ? (
+        <div className="relative z-10 flex flex-col items-center justify-center min-h-screen px-4 space-y-6">
+          <h1 className="text-5xl font-extrabold text-white drop-shadow-md">
+            Tic Tac Toe
+          </h1>
+          <h2 className="text-xl font-medium text-gray-300">
+            Choose Your Mode
+          </h2>
+
+          {/* Mode Selector */}
+          <div className="flex items-center space-x-4 text-lg">
+            <button
+              onClick={toggleGameMode}
+              className="px-3 py-1 rounded bg-gray-800 hover:bg-gray-900"
+            >
+              {"<"}
+            </button>
+            <div className="px-4 py-2 rounded-md bg-gray-800 text-white  ">
+              {gameMode}
+            </div>
+            <button
+              onClick={toggleGameMode}
+              className="px-3 py-1 rounded bg-gray-800 hover:bg-gray-900"
+            >
+              {">"}
+            </button>
+          </div>
+
+          {/* LOCAL Mode Inputs */}
+          {gameMode === "LOCAL" && (
+            <div className="space-y-2 text-center w-full max-w-xs">
+              <input
+                type="text"
+                placeholder="Player 1 Name"
+                className="w-full px-4 py-2 rounded bg-gray-800 text-white outline-none focus:ring focus:ring-blue-500"
+                value={Player1}
+                onChange={(e) => setPlayer1(e.target.value)}
+              />
+              <input
+                type="text"
+                placeholder="Player 2 Name"
+                className="w-full px-4 py-2 rounded bg-gray-800 text-white outline-none focus:ring focus:ring-blue-500"
+                value={Player2}
+                onChange={(e) => setPlayer2(e.target.value)}
+              />
+            </div>
+          )}
+
+          {/* ONLINE Mode Inputs */}
+          {gameMode === "ONLINE" && (
+            <div className="flex flex-col items-center space-y-4 w-full max-w-xs">
+              <div className="flex space-x-4">
+                <button
+                  onClick={() => {
+                    const newRoomId = generateRoomId();
+                    setRoomId(newRoomId);
+                    setIsJoining(false);
+                  }}
+                  className="px-4 py-2 rounded bg-green-600 hover:bg-green-500"
+                >
+                  Create Room
+                </button>
+                <button
+                  onClick={() => {
+                    setRoomId("");
+                    setIsJoining(true);
+                  }}
+                  className="px-4 py-2 rounded bg-yellow-500 hover:bg-yellow-400 text-black"
+                >
+                  Join Room
+                </button>
+              </div>
+
+              {isJoining ? (
+                <div className="w-full space-y-2">
+                  <input
+                    type="text"
+                    value={roomId}
+                    onChange={(e) => setRoomId(e.target.value.toUpperCase())}
+                    placeholder="Enter Room ID"
+                    className="w-full px-4 py-2 rounded bg-gray-800 text-white outline-none focus:ring focus:ring-blue-500"
+                  />
+                  {errorMessage && (
+                    <p className="text-sm text-red-400">{errorMessage}</p>
+                  )}
+                </div>
+              ) : (
+                <div className="w-full space-y-2 text-center">
+                  <p>
+                    Room ID: <strong className="font-mono">{roomId}</strong>
+                  </p>
+                  <p className="text-sm text-gray-400">
+                    Share this ID with a friend to join!
+                  </p>
+                  {errorMessage && (
+                    <p className="text-sm text-red-400">{errorMessage}</p>
+                  )}
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Menu Buttons */}
+          <div className="flex flex-col space-y-3 w-full max-w-xs">
+            <button
+              onClick={() => handlePlayGame()}
+              className="w-full px-4 py-2 rounded bg-blue-600 hover:bg-blue-500"
+            >
+              Play Game
+            </button>
+            <button
+              onClick={() => navigate("leaderboard")}
+              className="w-full px-4 py-2 rounded bg-purple-600 hover:bg-purple-500"
+            >
+              View Leaderboard
+            </button>
+            <button
+              onClick={() => navigate("/home")}
+              className="w-full px-4 py-2 rounded bg-gray-800 hover:bg-gray-900"
+            >
+              Exit
+            </button>
+          </div>
+        </div>
+      ) : (
+        <>
+          {gameMode === "LOCAL" && (
+            <TicTacToeBoard player1={Player1} player2={Player2} />
+          )}
+          {gameMode === "ONLINE" && (
+            <TicTacToeOnlineBoard
+              roomId={roomId}
+              playerId={userId}
+              username={username}
+              handleQuit={handleQuit}
+            />
+          )}
+        </>
       )}
     </div>
   );
