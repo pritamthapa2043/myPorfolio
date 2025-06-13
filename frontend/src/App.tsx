@@ -1,7 +1,7 @@
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import Login from "./pages/Login/Login";
 import Home from "./pages/Home/Home";
-// import PrivateRoutes from "./components/PrivateRoutes/PrivateRoutes";
+import PrivateRoutes from "./components/PrivateRoutes/PrivateRoutes";
 import GameDashboard from "./pages/Game/GameDashboard/GameDashboard";
 import DotsAndBoxes from "./pages/Game/DotsAndBoxes/DotsAndBoxes";
 import TicTacToe from "./pages/Game/TicTacToe/TicTacToe";
@@ -20,7 +20,9 @@ function App() {
           <Route path="dotsAndBoxes" element={<DotsAndBoxes />} />
           <Route path="ticTacToe">
             <Route index element={<TicTacToe />} />
-            <Route path="leaderboard" element={<TicTacToeLeaderboard />} />
+            <Route element={<PrivateRoutes />}>
+              <Route path="leaderboard" element={<TicTacToeLeaderboard />} />
+            </Route>
           </Route>
         </Route>
 

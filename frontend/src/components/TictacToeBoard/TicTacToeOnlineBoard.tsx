@@ -211,74 +211,92 @@ const TicTacToeOnlineBoard: React.FC<TicTacToeBoardProps> = ({
   };
 
   return (
-    <div className="ticTictoe-board-container">
-      <div className="player X">
-        <h1>{role}</h1>
-        <span>{username}</span>
+    <div className="flex flex-col md:flex-row items-center justify-center w-full min-h-screen gap-6 p-4 bg-gray-700 text-white">
+      {/* Player 1 */}
+      <div className="flex flex-col items-center gap-1 md:w-1/5 text-center">
+        <h1 className="text-4xl font-bold text-blue-400">{role}</h1>
+        <span className="text-gray-300 text-sm">{username || "Player 1"}</span>
       </div>
 
-      <div className="canvas-container">
-        <div className="canvas-tictactoe">
-          <canvas
-            ref={canvasRef}
-            width={CELL_SIZE * BOARD_SIZE}
-            height={CELL_SIZE * BOARD_SIZE}
-            onClick={handleClick}
-            style={{ border: "2px solid #000", cursor: "pointer" }}
-          />
-        </div>
-        <div className="winner-container">
-          <div>{statusMessage}</div>
-          {winner && (
-            <div className="winner-message">
-              <span>🎉 Winner:</span> <strong>{winner}</strong>
+      {/* Canvas & Controls */}
+      <div className="flex flex-col items-center gap-4">
+        <canvas
+          ref={canvasRef}
+          width={CELL_SIZE * BOARD_SIZE}
+          height={CELL_SIZE * BOARD_SIZE}
+          onClick={handleClick}
+          className="bg-gray-100 border-4 border-gray-900 rounded-lg shadow-lg cursor-pointer"
+        />
+
+        {/* Game Status */}
+        <div className="flex flex-col items-center gap-3 text-center">
+          <div className="text-lg text-gray-300">{statusMessage}</div>
+
+          {(winner || isDraw) && (
+            <div className="flex flex-col items-center gap-2">
+              {winner && (
+                <div className="text-xl font-semibold text-green-400">
+                  🎉 Winner: <strong>{winner}</strong>
+                </div>
+              )}
+
+              {isDraw && !winner && (
+                <div className="text-lg font-semibold text-yellow-400">
+                  It's a draw! 🤝
+                </div>
+              )}
+
+              {/* Rematch Button */}
               <button
                 disabled={isRematchRejected}
                 onClick={() => handleRematch("request")}
-              >
-                Rematch
-              </button>
-              {isRematchRequsted && (
-                <>
-                  <button onClick={() => handleRematch("accept")}>
-                    Accept
-                  </button>
-                  <button onClick={() => handleRematch("reject")}>
-                    Reject
-                  </button>
-                </>
-              )}
-            </div>
-          )}
-          {isDraw && !winner && (
-            <div className="draw-message">
-              <span>It's a draw! 🤝</span>
-              <button
-                disabled={isRematchRejected}
-                onClick={() => handleRematch("request")}
+                className={`px-4 py-2 rounded-md font-medium transition ${
+                  isRematchRejected
+                    ? "bg-gray-500 cursor-not-allowed"
+                    : "bg-blue-500 hover:bg-blue-600"
+                }`}
               >
                 Rematch
               </button>
 
+              {/* Accept / Reject Buttons */}
               {isRematchRequsted && (
-                <>
-                  <button onClick={() => handleRematch("accept")}>
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => handleRematch("accept")}
+                    className="px-3 py-1 rounded-md bg-green-500 hover:bg-green-600"
+                  >
                     Accept
                   </button>
-                  <button onClick={() => handleRematch("reject")}>
+                  <button
+                    onClick={() => handleRematch("reject")}
+                    className="px-3 py-1 rounded-md bg-red-500 hover:bg-red-600"
+                  >
                     Reject
                   </button>
-                </>
+                </div>
               )}
             </div>
           )}
-          <button onClick={() => handelQuit()}>QUIT</button>
+
+          {/* Quit Button */}
+          <button
+            onClick={() => handelQuit()}
+            className="mt-2 px-4 py-2 rounded-md bg-red-500 hover:bg-red-600 transition"
+          >
+            Quit
+          </button>
         </div>
       </div>
 
-      <div className="player O">
-        <h1>{role === "O" ? "X" : "O"}</h1>
-        <span>{playerInfo}</span>
+      {/* Player 2 */}
+      <div className="flex flex-col items-center gap-1 md:w-1/5 text-center">
+        <h1 className="text-4xl font-bold text-red-400">
+          {role === "O" ? "X" : "O"}
+        </h1>
+        <span className="text-gray-300 text-sm">
+          {playerInfo || "Player 2"}
+        </span>
       </div>
     </div>
   );

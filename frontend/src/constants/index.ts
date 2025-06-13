@@ -20,7 +20,7 @@ export const myProjects = [
       "An interactive, real-time Tic-Tac-Toe game with online multiplayer support. Built with React, WebSocket, and PostgreSQL, it allows players to join or create private game rooms, play competitively, and view a live leaderboard showcasing player rankings, wins, losses, and draws. The game features smooth animations, responsive design, and real-time synchronization between players for a seamless experience.",
 
     isViewProject: true,
-    href: "",
+    navigate: "/game/tictactoe",
     logo: "",
     image: "/assets/projects/game-engine.jpg",
     tags: [
@@ -59,7 +59,7 @@ export const myProjects = [
       "BIM is a digital representation of a building’s physical and functional characteristics, used to visualize asset placement, support maintenance, and ensure spatial coordination throughout construction and operation.",
     nda: "(Work done under NDA at Sonicbolt Technologies LLP. Details simplified for confidentiality.)",
     isViewProject: false,
-    href: "",
+    navigate: "",
     logo: "",
     image: "/assets/projects/game-engine.jpg",
     tags: [
@@ -101,7 +101,7 @@ export const myProjects = [
       "A secure, scalable platform for tracking physical assets with real-time updates. Features include inventory management, audit logs, reporting, and role-based access control. Built with React, Express.js, and PostgreSQL for robust data integrity, with SSE (Server-Sent Events) and WebSocket for live tracking and notifications. Optimized for performance and real-time analytics.",
     nda: "(Work done under NDA at Sonicbolt Technologies LLP. Details simplified for confidentiality.)",
     isViewProject: false,
-    href: "",
+    navigate: "",
     logo: "",
     image: "/assets/projects/game-engine.jpg",
     tags: [

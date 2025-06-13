@@ -14,7 +14,7 @@ interface Project {
   image: string;
   tags: Tag[];
   logo: string;
-  href: string;
+  navigate: string;
   isViewProject: boolean;
   nda?: string;
 }
@@ -23,7 +23,7 @@ const Project = ({
   title,
   description,
   subDescription,
-  href,
+  navigate,
   image,
   tags,
   isViewProject,
@@ -57,7 +57,7 @@ const Project = ({
           subDescription={subDescription}
           image={image}
           tags={tags}
-          href={href}
+          nav={navigate}
           isViewProject={isViewProject}
           closeModal={() => setIsHidden(false)}
           nda={nda}
