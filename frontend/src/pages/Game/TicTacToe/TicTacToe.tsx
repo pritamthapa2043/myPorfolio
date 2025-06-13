@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import TicTacToeBoard from "../../../components/TictacToeBoard/TicTacToeBoard";
 import TicTacToeOnlineBoard from "../../../components/TictacToeBoard/TicTacToeOnlineBoard";
 import { handleRoomExist } from "../../../api/api";
+import UserProfileMenu from "../../../components/Profile/UserProfileMenu";
 
 const TicTacToe = () => {
   const userId = parseInt(localStorage.getItem("userId") || "0");
@@ -36,7 +37,7 @@ const TicTacToe = () => {
     setErrorMessage("");
   };
 
-  const handlePlayGame = async () => {
+  const handlePlayGameOnline = async () => {
     const result = await handleRoomExist(roomId);
     if (!isJoining) {
       if (result.message === "Room does not exist") {
@@ -54,9 +55,14 @@ const TicTacToe = () => {
       }
     }
   };
+  const handlePlayGameOffline = () => {
+    setIsGameMenu(false);
+    setErrorMessage("");
+  };
 
   return (
     <div className="relative w-screen h-screen overflow-hidden bg-gray-700 text-white">
+      <UserProfileMenu />
       {/* Background Grid */}
       {isGameMenu && (
         <div className="absolute inset-0 grid grid-cols-14 grid-rows-8 ">
@@ -174,7 +180,11 @@ const TicTacToe = () => {
           {/* Menu Buttons */}
           <div className="flex flex-col space-y-3 w-full max-w-xs">
             <button
-              onClick={() => handlePlayGame()}
+              onClick={() =>
+                gameMode === "ONLINE"
+                  ? handlePlayGameOnline()
+                  : handlePlayGameOffline()
+              }
               className="w-full px-4 py-2 rounded bg-blue-600 hover:bg-blue-500"
             >
               Play Game
