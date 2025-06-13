@@ -18,7 +18,7 @@ export const myProjects = [
     description: "A lightweight game.",
     subDescription:
       "An interactive, real-time Tic-Tac-Toe game with online multiplayer support. Built with React, WebSocket, and PostgreSQL, it allows players to join or create private game rooms, play competitively, and view a live leaderboard showcasing player rankings, wins, losses, and draws. The game features smooth animations, responsive design, and real-time synchronization between players for a seamless experience.",
-
+    nda: "🚧 Work In Progress: Hosting Online Mode Server",
     isViewProject: true,
     navigate: "/game/tictactoe",
     logo: "",
@@ -80,11 +80,7 @@ export const myProjects = [
       },
       {
         id: 4,
-        name: "React Three Fiber",
-      },
-      {
-        id: 5,
-        name: "GSAP",
+        name: "R3F",
       },
       {
         id: 6,
