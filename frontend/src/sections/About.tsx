@@ -1,6 +1,6 @@
 import { lazy, Suspense, useRef } from "react";
 import Card from "../components/Card/Card";
-import { myTechStack } from "../constants";
+import { myTechStack } from "../constants/constants";
 import { useInView } from "framer-motion";
 import { HiOutlineDocumentDownload } from "react-icons/hi";
 import { Canvas } from "@react-three/fiber";
@@ -26,7 +26,7 @@ const About = () => {
         {/* Grid 1 */}
         <div className="flex flex-col justify-end p-6 relative overflow-hidden row-span-4 md:col-span-3 h-[20rem] md:h-full bg-gradient-to-b from-gray-800 to-gray-950 rounded-2xl">
           <img
-            src="assets/coding-pov.png"
+            src="assets/coding-pov.webp"
             className="absolute scale-[1.75] -right-[5rem] -top-[1rem] md:scale-[3] md:left-50 md:inset-y-10 lg:scale-[2.5]"
           />
           <div className="z-10">

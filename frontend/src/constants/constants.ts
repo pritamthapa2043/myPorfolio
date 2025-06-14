@@ -19,10 +19,11 @@ export const myProjects = [
     subDescription:
       "An interactive, real-time Tic-Tac-Toe game with online multiplayer support. Built with React, WebSocket, and PostgreSQL, it allows players to join or create private game rooms, play competitively, and view a live leaderboard showcasing player rankings, wins, losses, and draws. The game features smooth animations, responsive design, and real-time synchronization between players for a seamless experience.",
     nda: "🚧 Work In Progress: Hosting Server for Online mode, User Login and User Register",
+
     isViewProject: true,
     navigate: "/game/tictactoe",
     logo: "",
-    image: "/assets/projects/game-engine.jpg",
+    image: "/assets/projects/tic.webp",
     tags: [
       {
         id: 1,
@@ -53,44 +54,6 @@ export const myProjects = [
   },
   {
     id: 2,
-    title: "BIM (Building Information Modeling)",
-    description: "A Web Application.",
-    subDescription:
-      "BIM is a digital representation of a building’s physical and functional characteristics, used to visualize asset placement, support maintenance, and ensure spatial coordination throughout construction and operation.",
-    nda: "(Work done under NDA at Sonicbolt Technologies LLP. Details simplified for confidentiality.)",
-    isViewProject: false,
-    navigate: "",
-    logo: "",
-    image: "/assets/projects/game-engine.jpg",
-    tags: [
-      {
-        id: 1,
-        name: "React",
-        Icon: SiReact,
-      },
-      {
-        id: 2,
-        name: "Typescript",
-        Icon: SiTypescript,
-      },
-      {
-        id: 3,
-        name: "Three.js",
-        Icon: SiThreedotjs,
-      },
-      {
-        id: 4,
-        name: "R3F",
-      },
-      {
-        id: 6,
-        name: "Express",
-        Icon: SiExpress,
-      },
-    ],
-  },
-  {
-    id: 3,
     title: "Asset Management",
     description: "A Web Application.",
     subDescription:
@@ -99,7 +62,7 @@ export const myProjects = [
     isViewProject: false,
     navigate: "",
     logo: "",
-    image: "/assets/projects/game-engine.jpg",
+    image: "/assets/projects/asset.webp",
     tags: [
       {
         id: 1,
@@ -126,6 +89,44 @@ export const myProjects = [
         id: 5,
         name: "PostgreSQL",
         Icon: SiPostgresql,
+      },
+    ],
+  },
+  {
+    id: 3,
+    title: "BIM (Building Information Modeling)",
+    description: "A Web Application.",
+    subDescription:
+      "BIM is a digital representation of a building’s physical and functional characteristics, used to visualize asset placement, support maintenance, and ensure spatial coordination throughout construction and operation.",
+    nda: "(Work done under NDA at Sonicbolt Technologies LLP. Details simplified for confidentiality.)",
+    isViewProject: false,
+    navigate: "",
+    logo: "",
+    image: "/assets/projects/bim.webp",
+    tags: [
+      {
+        id: 1,
+        name: "React",
+        Icon: SiReact,
+      },
+      {
+        id: 2,
+        name: "Typescript",
+        Icon: SiTypescript,
+      },
+      {
+        id: 3,
+        name: "Three.js",
+        Icon: SiThreedotjs,
+      },
+      {
+        id: 4,
+        name: "R3F",
+      },
+      {
+        id: 6,
+        name: "Express",
+        Icon: SiExpress,
       },
     ],
   },

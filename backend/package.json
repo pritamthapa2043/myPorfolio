@@ -3,12 +3,13 @@
   "version": "1.0.0",
   "main": "server.js",
   "scripts": {
-    "dev": "concurrently \"npm run server\"  \"npm run socket\" \"npm run client\"",
+    "dev": "concurrently \"npm run server\" \"npm run socket\" \"npm run client\"",
     "server": "nodemon src/server.ts",
     "socket": "nodemon src/wsServer.ts",
     "migrate": "ts-node src/scripts/migrate.ts",
     "build": "tsc",
-    "client": "cd ../frontend && npm run dev"
+    "client": "cd ../frontend && npm run dev",
+    "start": "node dist/server.js && node dist/wsServer.js"
   },
   "keywords": [],
   "author": "",
