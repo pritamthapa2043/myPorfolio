@@ -11,10 +11,9 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Navigate to="/home" />} />
+        <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
 
-        <Route path="/home" element={<Home />} />
         <Route path="/game">
           <Route index element={<GameDashboard />} />
           <Route path="dotsAndBoxes" element={<DotsAndBoxes />} />

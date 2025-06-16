@@ -205,7 +205,7 @@ const TicTacToe = () => {
               View Leaderboard
             </button>
             <button
-              onClick={() => navigate("/home")}
+              onClick={() => navigate("/")}
               className="w-full px-4 py-2 rounded bg-gray-800 hover:bg-gray-900"
             >
               Exit
