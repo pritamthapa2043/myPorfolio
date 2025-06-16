@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import TicTacToeBoard from "../../../components/TictacToeBoard/TicTacToeBoard";
 import TicTacToeOnlineBoard from "../../../components/TictacToeBoard/TicTacToeOnlineBoard";
-import { handleRoomExist } from "../../../api/api";
+// import { handleRoomExist } from "../../../api/api";
 import UserProfileMenu from "../../../components/Profile/UserProfileMenu";
 
 const TicTacToe = () => {
@@ -38,22 +38,26 @@ const TicTacToe = () => {
   };
 
   const handlePlayGameOnline = async () => {
-    const result = await handleRoomExist(roomId);
-    if (!isJoining) {
-      if (result.message === "Room does not exist") {
-        setIsGameMenu(false);
-        setErrorMessage("");
-      } else {
-        setErrorMessage("Room ID already exists. Create a new one.");
-      }
-    } else {
-      if (result.message === "Room does not exist") {
-        setErrorMessage(result.message);
-      } else {
-        setIsGameMenu(false);
-        setErrorMessage("");
-      }
-    }
+    // const result = await handleRoomExist(roomId);
+    // if (!isJoining) {
+    //   if (result.message === "Room does not exist") {
+    //     setIsGameMenu(false);
+    //     setErrorMessage("");
+    //   } else {
+    //     setErrorMessage("Room ID already exists. Create a new one.");
+    //   }
+    // } else {
+    //   if (result.message === "Room does not exist") {
+    //     setErrorMessage(result.message);
+    //   } else {
+    //     setIsGameMenu(false);
+    //     setErrorMessage("");
+    //   }
+    // }
+
+    setErrorMessage(
+      "⚠ Online mode is not available yet. WebSocket server deployment in progress."
+    );
   };
   const handlePlayGameOffline = () => {
     setIsGameMenu(false);
@@ -190,13 +194,18 @@ const TicTacToe = () => {
               Play Game
             </button>
             <button
-              onClick={() => navigate("leaderboard")}
+              // onClick={() => navigate("leaderboard")}
+              onClick={() =>
+                setErrorMessage(
+                  "⚠ Online mode is not available yet. WebSocket server deployment in progress."
+                )
+              }
               className="w-full px-4 py-2 rounded bg-purple-600 hover:bg-purple-500"
             >
               View Leaderboard
             </button>
             <button
-              onClick={() => navigate("/home")}
+              onClick={() => navigate("/")}
               className="w-full px-4 py-2 rounded bg-gray-800 hover:bg-gray-900"
             >
               Exit
@@ -206,7 +215,11 @@ const TicTacToe = () => {
       ) : (
         <>
           {gameMode === "LOCAL" && (
-            <TicTacToeBoard player1={Player1} player2={Player2} />
+            <TicTacToeBoard
+              player1={Player1}
+              player2={Player2}
+              handleQuit={handleQuit}
+            />
           )}
           {gameMode === "ONLINE" && (
             <TicTacToeOnlineBoard
