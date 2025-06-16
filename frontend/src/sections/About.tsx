@@ -128,7 +128,7 @@ const About = () => {
           <p className="text-lg font-semibold mb-2 text-white">Resume</p>
           <div className=" flex flex-col items-center justify-center">
             <a
-              href="/public/assets/resume/PritamThapa-Resume.pdf"
+              href="/assets/resume/PritamThapa-Resume.pdf"
               download
               className="download-button w-fit "
             >

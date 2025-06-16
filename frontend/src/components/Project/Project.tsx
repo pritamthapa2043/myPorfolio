@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import ProjectDetails from "../ProjectDetails/ProjectDetails";
 
 interface Tag {
@@ -30,6 +30,20 @@ const Project = ({
   nda,
 }: Project) => {
   const [isHidden, setIsHidden] = useState(false);
+
+  // ✅ Scroll lock logic here
+  useEffect(() => {
+    if (isHidden) {
+      document.body.classList.add("overflow-hidden");
+    } else {
+      document.body.classList.remove("overflow-hidden");
+    }
+
+    // Cleanup on unmount or isHidden change
+    return () => {
+      document.body.classList.remove("overflow-hidden");
+    };
+  }, [isHidden]);
 
   return (
     <>

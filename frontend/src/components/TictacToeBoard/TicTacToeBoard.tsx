@@ -5,6 +5,7 @@ type Player = "X" | "O" | null;
 type TicTacToeBoardProps = {
   player1: string;
   player2: string;
+  handleQuit: () => void;
 };
 
 const CELL_SIZE = 100;
@@ -13,6 +14,7 @@ const BOARD_SIZE = 3;
 const TicTacToeBoard: React.FC<TicTacToeBoardProps> = ({
   player1,
   player2,
+  handleQuit,
 }) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const [board, setBoard] = useState<Player[][]>(
@@ -145,6 +147,12 @@ const TicTacToeBoard: React.FC<TicTacToeBoardProps> = ({
             </div>
           )}
         </div>
+        <button
+          onClick={() => handleQuit()}
+          className="mt-2 px-4 py-2 rounded-md bg-red-500 hover:bg-red-600 transition"
+        >
+          Quit
+        </button>
       </div>
 
       {/* Player 2 */}

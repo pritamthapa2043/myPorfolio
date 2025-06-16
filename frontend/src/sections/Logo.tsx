@@ -20,7 +20,7 @@ const Logo = () => {
         <h1 className="absolute left-0 top-1/2 translate-x-0 -translate-y-1/2 opacity-0 scale-90 group-hover:opacity-100 group-hover:translate-x-[80%] group-hover:scale-100 transition-all duration-500 ease-in-out text-white text-3xl font-semibold whitespace-nowrap pointer-events-none h-10 flex items-center">
           Pritam
           <img
-            src="/assets/pritam.jpeg"
+            src="/assets/pritam.webp"
             alt="Pritam"
             className="absolute left-[calc(90%+1.5rem)] top-1/2 -translate-y-1/2 opacity-0 scale-90 group-hover:opacity-100 group-hover:scale-100 transition-all duration-500 ease-in-out w-10 h-10 rounded-full object-cover pointer-events-none"
           />
