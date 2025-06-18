@@ -9,7 +9,7 @@
     "migrate": "ts-node src/scripts/migrate.ts",
     "build": "tsc",
     "client": "cd ../frontend && npm run dev",
-    "start": "npm run build && concurrently \"node dist/server.js\" \"node dist/wsServer.js\"",
+    "start": "concurrently \"node dist/server.js\" \"node dist/wsServer.js\"",
     "dev:local": "dotenv -e .env.local -- npm run dev",
     "dev:prod": "dotenv -e .env.production -- npm run start",
     "migrate:local": "dotenv -e .env.local -- npm run migrate",
