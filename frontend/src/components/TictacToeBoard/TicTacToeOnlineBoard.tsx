@@ -15,8 +15,8 @@ type TicTacToeBoardProps = {
 const CELL_SIZE = 100;
 const BOARD_SIZE = 3;
 const WS_URL = import.meta.env.PROD
-  ? "wss://myportfolio-production-1633.up.railway.app" // your Railway app URL with **wss://**
-  : "ws://localhost:2020"; // for local development
+  ? "wss://myportfolio-production-1633.up.railway.app"
+  : "ws://localhost:8080";
 
 const TicTacToeOnlineBoard: React.FC<TicTacToeBoardProps> = ({
   roomId,
