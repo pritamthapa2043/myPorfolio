@@ -9,7 +9,11 @@
     "migrate": "ts-node src/scripts/migrate.ts",
     "build": "tsc",
     "client": "cd ../frontend && npm run dev",
-    "start": "npm run migrate && npm run build && concurrently \"node dist/server.js\" \"node dist/wsServer.js\""
+    "start": "npm run build && concurrently \"node dist/server.js\" \"node dist/wsServer.js\"",
+    "dev:local": "dotenv -e .env.local -- npm run dev",
+    "dev:prod": "dotenv -e .env.production -- npm run start",
+    "migrate:local": "dotenv -e .env.local -- npm run migrate",
+    "migrate:prod": "cross-env NODE_ENV=production dotenv -e .env.production -- npm run migrate"
   },
   "keywords": [],
   "author": "",
@@ -33,6 +37,8 @@
     "@types/pg": "^8.11.11",
     "@types/ws": "^8.18.1",
     "concurrently": "^9.1.2",
+    "cross-env": "^7.0.3",
+    "dotenv-cli": "^8.0.0",
     "nodemon": "^3.1.9",
     "ts-node": "^10.9.2",
     "typescript": "^5.8.2"

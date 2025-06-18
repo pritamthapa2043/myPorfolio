@@ -23,5 +23,5 @@ app.use("/api/ticTacToe", tic_tac_toeRoutes);
 
 // Start Server
 app.listen(PORT, () => {
-  console.log(`✅ Server running on http://localhost:${PORT}`);
+  console.log(`✅ Server running on ${PORT}`);
 });

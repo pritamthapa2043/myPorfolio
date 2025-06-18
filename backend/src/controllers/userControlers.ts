@@ -12,6 +12,7 @@ import { AuthRequest } from "../types/types";
 
 export const createUserHandler = async (req: Request, res: Response) => {
   try {
+    console.log("register");
     const { username, email, password, roles } = req.body;
     const isUserExist = await getUserByEmail(email);
     if (isUserExist) {
