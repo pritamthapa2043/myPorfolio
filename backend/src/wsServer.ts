@@ -3,26 +3,37 @@ import { Pool } from "pg";
 import dotenv from "dotenv";
 dotenv.config();
 
-const pool = new Pool({
-  host: process.env.DB_HOST,
-  port: Number(process.env.DB_PORT),
-  database: process.env.DB_NAME,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-});
+const pool = new Pool(
+  process.env.DATABASE_URL
+    ? {
+        connectionString: process.env.DATABASE_URL,
+        ssl:
+          process.env.NODE_ENV === "production"
+            ? { rejectUnauthorized: false }
+            : undefined,
+      }
+    : {
+        host: process.env.DB_HOST || "localhost",
+        port: Number(process.env.DB_PORT) || 5432,
+        database: process.env.DB_NAME || "your_local_db_name",
+        user: process.env.DB_USER || "your_local_user",
+        password: process.env.DB_PASSWORD || "your_local_password",
+      }
+);
 
 // ✅ Test DB Connection
 pool
   .connect()
   .then((client) => {
-    console.log("Database connected!");
+    console.log("✅ PostgreSQL Connected");
     client.release();
   })
   .catch((err) => {
-    console.error("Database connection error:", err);
+    console.error("❌ Database connection error:", err);
   });
 
-const PORT = 2020;
+// ✅ Start WebSocket Server
+const PORT = Number(process.env.WS_PORT) || 2020;
 const wss = new WebSocketServer({ port: PORT });
 
 type PlayerSymbol = "X" | "O";
@@ -192,7 +203,7 @@ function broadcastToRoom(room: Room, data: any) {
 }
 
 wss.on("listening", () => {
-  console.log(`✅ WebSocket server running on ws://localhost:${PORT}`);
+  console.log(`✅ WebSocket server running on ws:${PORT}`);
 });
 
 wss.on("connection", (ws) => {

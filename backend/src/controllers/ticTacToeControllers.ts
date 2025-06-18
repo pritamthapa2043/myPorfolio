@@ -4,7 +4,7 @@ import { getGame, getLeaderboardData } from "../models/gamesModel";
 export const getGameByRoomID = async (req: Request, res: Response) => {
   try {
     const roomId = req.query.roomId as string;
-
+    console.log("reached");
     const room = await getGame(roomId);
     if (Number(room) === 0) {
       res.send({ message: "Room does not exist" });

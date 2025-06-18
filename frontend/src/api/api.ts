@@ -1,9 +1,13 @@
 import axios from "axios";
 
+const baseUrl = import.meta.env.PROD
+  ? "myportfolio-production-1633.up.railway.app" // Use your production server URL here later
+  : "/api";
+
 export const handleLogin = async (email: string, password: string) => {
   try {
     const credentials = { email, password };
-    const result = await axios.post("/api/auth/login", credentials);
+    const result = await axios.post(`${baseUrl}/auth/login`, credentials);
     return result;
   } catch (error: unknown) {
     return error;
@@ -17,7 +21,7 @@ export const handleRegister = async (
 ) => {
   try {
     const newUserInfo = { username, email, password };
-    const result = await axios.post("/api/users/register", newUserInfo);
+    const result = await axios.post(`${baseUrl}/users/register`, newUserInfo);
     return result;
   } catch (error: unknown) {
     return error;
@@ -26,7 +30,7 @@ export const handleRegister = async (
 
 export const handleRoomExist = async (roomId: string) => {
   try {
-    const result = await axios.get("/api/ticTacToe/games", {
+    const result = await axios.get(`${baseUrl}/ticTacToe/games`, {
       params: { roomId },
     });
     return result.data;
@@ -36,7 +40,7 @@ export const handleRoomExist = async (roomId: string) => {
 };
 export const getLeaderboard = async () => {
   try {
-    const result = await axios.get("/api/ticTacToe/leaderboard");
+    const result = await axios.get(`${baseUrl}/ticTacToe/leaderboard`);
     return result.data.rows;
   } catch (error: unknown) {
     return error;
