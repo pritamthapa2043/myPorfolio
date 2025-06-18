@@ -1,6 +1,8 @@
 import WebSocket, { WebSocketServer } from "ws";
 import { Pool } from "pg";
 import dotenv from "dotenv";
+import express from "express";
+import http from "http";
 dotenv.config();
 
 const pool = new Pool(
@@ -33,8 +35,13 @@ pool
   });
 
 // ✅ Start WebSocket Server
-const PORT = Number(process.env.WS_PORT) || 2020;
-const wss = new WebSocketServer({ port: PORT });
+const app = express();
+const server = http.createServer(app);
+
+// Attach WebSocket server to the HTTP server
+const wss = new WebSocketServer({ server });
+
+const PORT = process.env.PORT || 8080;
 
 type PlayerSymbol = "X" | "O";
 type Player = {
