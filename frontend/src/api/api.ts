@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const baseUrl = import.meta.env.PROD
-  ? "myportfolio-production-1633.up.railway.app" // Use your production server URL here later
+  ? "myportfolio-production-1633.up.railway.app/api" // Use your production server URL here later
   : "/api";
 
 export const handleLogin = async (email: string, password: string) => {
