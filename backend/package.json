@@ -9,7 +9,7 @@
     "migrate": "ts-node src/scripts/migrate.ts",
     "build": "tsc",
     "client": "cd ../frontend && npm run dev",
-    "start": "npm run build && concurrently \"node dist/server.js\" \"node dist/wsServer.js\""
+    "start": "npm run migrate && npm run build && concurrently \"node dist/server.js\" \"node dist/wsServer.js\""
   },
   "keywords": [],
   "author": "",
