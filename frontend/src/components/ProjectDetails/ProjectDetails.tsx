@@ -81,7 +81,10 @@ const ProjectDetails = ({
             </div>
             {isViewProject && (
               <button
-                onClick={() => navigate(nav)}
+                onClick={() => {
+                  closeModal();
+                  navigate(nav);
+                }}
                 className="inline-flex items-center gap-1 font-medium cursor-pointer hover-animation"
               >
                 View Project
